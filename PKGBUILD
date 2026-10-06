@@ -1,6 +1,6 @@
 # Maintainer: Copper0SO4
 pkgname=mctier-linux-web-git
-pkgver=3.9.0.r381.g8aefe58
+pkgver=3.9.0.r382.gc362bd7
 pkgrel=1
 pkgdesc='MCTier Linux Web: virtual networking, chat and browser-based voice/screen sharing'
 arch=('x86_64')

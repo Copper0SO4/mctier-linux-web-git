@@ -1,6 +1,6 @@
 pkgbase = mctier-linux-web-git
 	pkgdesc = MCTier Linux Web: virtual networking, chat and browser-based voice/screen sharing
-	pkgver = 3.9.0.r381.g8aefe58
+	pkgver = 3.9.0.r382.gc362bd7
 	pkgrel = 1
 	url = https://github.com/Copper0SO4/MCTier_Linux_Web
 	install = mctier-linux-web.install

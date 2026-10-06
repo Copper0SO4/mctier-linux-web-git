@@ -46,4 +46,5 @@ PKGBUILD增加prepare首项Rust/Cargo启动预检，README说明实际工具链�
 - 用户报告服务实际可用，但 `mctier` 返回shell提示符后服务仍占用14700，无法由当前启动命令关闭。根因在启动器的“启动子进程 + 探测固定URL”：新服务绑定失败时，探活可能命中旧实例，误报新服务就绪，导致新启动流程和仍运行的旧服务脱离管理。
 - 主项目启动器现检查本安装位置的服务PID、检测已有健康端口后拒绝重复启动；服务就绪探测要求子进程仍在运行；退出时用TERM并等待子进程；新增 `mctier --stop`，只停止当前UID且可执行文件路径与当前安装一致的服务。不使用宽泛 `pkill`，不强杀服务。
 - README、首次安装/升级提示、主项目HANDOFF已说明前台控制和停止方式。Arch仓库README校验和及 `.SRCINFO` 已同步。
-- 验证待完成；未在用户真实服务环境执行停止、未构建/安装新包、未提交或推送。旧版或其他路径启动的遗留实例可能无法由路径匹配的 `mctier --stop` 识别，需用 `ss -lptn 'sport = :14700'` 查明PID后单独停止。
+- 验证完成：主项目 TypeScript/Vite 与 Rust release 构建通过；新停止入口用临时 `sleep` 可执行文件模拟，TERM 与 PID 路径校验通过。Arch 包使用系统 Rust 1.99.0/LLVM 23.1.1 完整 `makepkg` 成功，版本 `3.9.0.r382.gc362bd7-1`；`pacman -Qip`、包内启动脚本语法、README校验和、`.SRCINFO`一致性通过。包 SHA-256：`de6e68cc7c33f5d7a54644aae43f6ec880d84d60fe0a395ec97e081024ba3e40`。
+- 产物位于临时隔离目录 `/tmp/mctier-pacman-build.V4R1TQ/mctier-linux-web-git-3.9.0.r382.gc362bd7-1-x86_64.pkg.tar.zst`，未安装到系统、未启动服务、未触发 CAP 授权或真实联机。旧版或其他路径启动的遗留实例可能无法由路径匹配的 `mctier --stop` 识别，需用 `ss -lptn 'sport = :14700'` 查明PID后单独停止。GitHub 3.9.0 发布资产仍待上传。

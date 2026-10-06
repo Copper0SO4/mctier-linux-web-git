@@ -1,12 +1,12 @@
 post_install() {
   printf '%s\n' \
-    '在终端运行 mctier，按 Ctrl+C 停止服务。推荐 Chrome/Chromium。' \
+    '在终端前台运行 mctier；按 Ctrl+C 或运行 mctier --stop 停止服务。推荐 Chrome/Chromium。' \
     '首次启动仅在需要时请求 pkexec setcap；请通过桌面认证窗口自行输入密码。' \
     '不要用 sudo/root 启动 MCTier；安装不会启动服务或修改防火墙。' \
     '中文安装说明：/usr/share/doc/mctier-linux-web-git/README-Arch.md'
 }
 post_upgrade() {
   printf '%s\n' \
-    '升级后请退出旧服务再启动 mctier；新 EasyTier 文件可能需要重新授权 capability。' \
+    '升级后运行 mctier --stop 退出旧服务，再启动 mctier；新 EasyTier 文件可能需要重新授权 capability。' \
     '升级不会启动服务、修改防火墙或清理用户配置。'
 }

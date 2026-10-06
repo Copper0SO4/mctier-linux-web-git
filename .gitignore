@@ -1,0 +1,8 @@
+/src/
+/pkg/
+/MCTier/
+/easytier-linux-x86_64-v2.5.0.zip
+/easytier-LICENSE
+/*.pkg.tar.*
+/*.src.tar.*
+/*.log

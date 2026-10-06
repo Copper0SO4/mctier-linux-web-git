@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=MCTier
+GenericName=Virtual networking and communication
+Comment=Start the local MCTier service and open its browser interface
+Comment[zh_CN]=启动 MCTier 本地服务并打开浏览器界面
+Exec=mctier
+Icon=mctier
+Terminal=true
+Categories=Network;
+StartupNotify=false

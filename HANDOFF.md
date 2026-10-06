@@ -1,0 +1,28 @@
+# Arch 打包维护说明
+
+更新：2026-10-06。用户目标：使用本仓库安装MCTier Linux Web到Arch Linux，以 `mctier` 命令启动，并保留随包核心、普通用户运行和按需CAP授权边界。
+
+本仓库只管理打包，不复制Linux Web源码。源项目为 https://github.com/Copper0SO4/MCTier_Linux_Web 的master。当前功能/限制、协议及源码上游合并以该项目HANDOFF为准；已发布ZIP与本-git源码包不是同一制品。
+
+## 文件职责
+
+- PKGBUILD：Git源码、随包EasyTier/许可证校验、npm/Cargo准备、Linux独立构建和pacman安装布局。
+- .SRCINFO：由 `makepkg --printsrcinfo`生成，每次PKGBUILD变化同步。
+- mctier.sh：/usr/bin入口，调用/usr/lib/mctier-linux-web/launcher，避免BASH_SOURCE因路径包装找错资源。
+- mctier.desktop：应用菜单入口，在终端运行以展示授权与错误；不配置开机启动。
+- mctier-linux-web.install：只给出中文首次运行/升级提示，不能增加自动setcap、服务启动或防火墙更改。
+- README：安装、升级、运行需求、已知限制及许可。
+
+EasyTier包固定2.5.0，压缩包SHA-256沿用源项目fetch-binaries.sh；解压后两项再校验。许可证来自官方同版LICENSE（LGPL-3.0）。禁止strip/debug拆分改变核心哈希。后续核心更新须同时审查源项目校验、PKGBUILD校验、随包版本与许可，不独立升级到不兼容核心。
+
+## 本轮验证
+
+当前宿主为Arch Linux，已具备声明的构建/运行依赖；系统Rust曾有LLVM动态链接问题，本轮构建使用此前官方校验的临时Rust1.90.0，仅改变构建进程PATH，不修改系统安装。makepkg使用--nodeps跳过pacman依赖查询/安装，完整源码构建与包体检查结果随后记录。
+
+没有安装到系统、启动服务、修改CAP/防火墙或接入真实房间；应用菜单点击、首次安装授权、升级后重授权与跨端联机留待用户实际安装验收。CI或包体检查不得标成这些真实测试已通过。
+
+- 第一次Vite构建出现源码目录MCTier与本地包装文件mctier的名称碰撞（路径被解析到包装文件）。将打包源文件改名mctier.sh，安装目标仍为/usr/bin/mctier；重试Vite构建通过。源码适配未更改。README.md纳入source校验，确保源码包也包含安装说明。
+
+- 构建成功：makepkg生成 `mctier-linux-web-git-3.9.0.r379.g9f64665-1-x86_64.pkg.tar.zst`，约109MiB，源代码提交9f64665；TypeScript/Vite（566项表情）及Rust release构建通过。Shell语法、desktop文件、SRCINFO一致性和包体9个必需文件字节一致性校验通过，执行文件/目录为root:root、0755，文档0644。EasyTier保持原官方哈希，未strip。
+- 包SHA-256：`0b6e3651ed6b22ad1e2c23a4f376e32d7dd4f161af6b484cf7c18f78812065c1`。验证包未执行系统安装/认证/启动；未重跑源码全套自动化。主项目31a4795仅增加Arch文档，后续-git构建版本会随Git提交增加。
+- 已准备main分支提交及推送至用户指定GitHub仓库。只上传打包源文件与文档，生成的.pkg.tar.zst保持本地，不宣称已上AUR。

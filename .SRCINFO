@@ -1,7 +1,7 @@
 pkgbase = mctier-linux-web-git
 	pkgdesc = MCTier Linux Web: virtual networking, chat and browser-based voice/screen sharing
 	pkgver = 3.9.0.r379.g9f64665
-	pkgrel = 1
+	pkgrel = 2
 	url = https://github.com/Copper0SO4/MCTier_Linux_Web
 	install = mctier-linux-web.install
 	arch = x86_64
@@ -11,7 +11,6 @@ pkgbase = mctier-linux-web-git
 	makedepends = nodejs>=20
 	makedepends = npm
 	makedepends = rust>=1.90
-	makedepends = desktop-file-utils
 	depends = bash
 	depends = glibc
 	depends = gcc-libs
@@ -36,13 +35,11 @@ pkgbase = mctier-linux-web-git
 	source = https://github.com/EasyTier/EasyTier/releases/download/v2.5.0/easytier-linux-x86_64-v2.5.0.zip
 	source = easytier-LICENSE::https://raw.githubusercontent.com/EasyTier/EasyTier/v2.5.0/LICENSE
 	source = mctier.sh
-	source = mctier.desktop
 	source = README.md
 	sha256sums = SKIP
 	sha256sums = c715d62ffcdad2578bc5d743bdfbcfe02cda9c12f80bd1bad3b36d4d7fc0eb8b
 	sha256sums = e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118
 	sha256sums = ba3b7137f5544d63e96c1e4458bb584c4605b29227969c1a54e30a75388b569e
-	sha256sums = 38ff3bb75ee54dd69f052e079f82855a13c7ef80312692d521db87bafa5beb32
-	sha256sums = 0a0a27f417adfb5d93b6ddbaea5e218be07b747bf293a75e6d678722cc1146f8
+	sha256sums = 01a61c8e899f556475f691d47cb7daf364391e9a4419982e9085a45892d87fb1
 
 pkgname = mctier-linux-web-git

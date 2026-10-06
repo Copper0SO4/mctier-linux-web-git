@@ -1,6 +1,6 @@
 post_install() {
   printf '%s\n' \
-    '运行 mctier，或从应用菜单启动 MCTier。推荐 Chrome/Chromium。' \
+    '在终端运行 mctier，按 Ctrl+C 停止服务。推荐 Chrome/Chromium。' \
     '首次启动仅在需要时请求 pkexec setcap；请通过桌面认证窗口自行输入密码。' \
     '不要用 sudo/root 启动 MCTier；安装不会启动服务或修改防火墙。' \
     '中文安装说明：/usr/share/doc/mctier-linux-web-git/README-Arch.md'

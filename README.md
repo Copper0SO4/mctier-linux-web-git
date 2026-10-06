@@ -1,6 +1,6 @@
 # mctier-linux-web-git（Arch Linux）
 
-为 [MCTier Linux Web](https://github.com/Copper0SO4/MCTier_Linux_Web) 提供 Arch Linux / pacman 源码构建包。安装后的启动命令是 **`mctier`**，应用菜单名称为 **MCTier**。沿用本地 Rust Web 服务与浏览器界面，不使用 Electron 或 Linux Tauri 窗口。
+为 [MCTier Linux Web](https://github.com/Copper0SO4/MCTier_Linux_Web) 提供 Arch Linux / pacman 源码构建包。安装后的启动命令是 **`mctier`**。沿用本地 Rust Web 服务与浏览器界面，不使用 Electron 或 Linux Tauri 窗口。
 
 ## 安装
 
@@ -31,11 +31,11 @@ makepkg -si
 mctier
 ```
 
-也可从应用菜单启动。启动器打开终端，以普通用户运行本地服务，就绪后尝试打开默认浏览器。使用 **Chrome/Chromium** 访问：
+请在终端运行 `mctier`。启动器以普通用户运行本地服务，就绪后尝试打开默认浏览器。使用 **Chrome/Chromium** 访问：
 
 <http://127.0.0.1:14700>
 
-保持终端运行，Ctrl+C停止服务。安装和升级不会自行启动服务，不安装开机启动单元。14700若已被旧实例占用，请先正常停止旧实例再启动。默认手动加入大厅；如在软件设置明确启用了启动自动组网，则沿用该保存配置。麦克风与屏幕共享由用户开启。
+保持终端运行，Ctrl+C停止服务；关闭浏览器页面不会停止后台服务。本包不提供桌面菜单入口。安装和升级不会自行启动服务，不安装开机启动单元。14700若已被旧实例占用，请先正常停止旧实例再启动。默认手动加入大厅；如在软件设置明确启用了启动自动组网，则沿用该保存配置。麦克风与屏幕共享由用户开启。
 
 可选浏览器和密码密钥环：
 

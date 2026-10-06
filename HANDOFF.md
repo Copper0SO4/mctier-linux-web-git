@@ -9,7 +9,7 @@
 - PKGBUILD：Git源码、随包EasyTier/许可证校验、npm/Cargo准备、Linux独立构建和pacman安装布局。
 - .SRCINFO：由 `makepkg --printsrcinfo`生成，每次PKGBUILD变化同步。
 - mctier.sh：/usr/bin入口，调用/usr/lib/mctier-linux-web/launcher，避免BASH_SOURCE因路径包装找错资源。
-- mctier.desktop：应用菜单入口，在终端运行以展示授权与错误；不配置开机启动。
+- 当前不提供desktop文件/应用菜单入口；仅支持终端启动mctier并通过Ctrl+C停止。
 - mctier-linux-web.install：只给出中文首次运行/升级提示，不能增加自动setcap、服务启动或防火墙更改。
 - README：安装、升级、运行需求、已知限制及许可。
 
@@ -26,3 +26,8 @@ EasyTier包固定2.5.0，压缩包SHA-256沿用源项目fetch-binaries.sh；解�
 - 构建成功：makepkg生成 `mctier-linux-web-git-3.9.0.r379.g9f64665-1-x86_64.pkg.tar.zst`，约109MiB，源代码提交9f64665；TypeScript/Vite（566项表情）及Rust release构建通过。Shell语法、desktop文件、SRCINFO一致性和包体9个必需文件字节一致性校验通过，执行文件/目录为root:root、0755，文档0644。EasyTier保持原官方哈希，未strip。
 - 包SHA-256：`0b6e3651ed6b22ad1e2c23a4f376e32d7dd4f161af6b484cf7c18f78812065c1`。验证包未执行系统安装/认证/启动；未重跑源码全套自动化。主项目31a4795仅增加Arch文档，后续-git构建版本会随Git提交增加。
 - 已准备main分支提交及推送至用户指定GitHub仓库。只上传打包源文件与文档，生成的.pkg.tar.zst保持本地，不宣称已上AUR。
+
+## 2026-10-06：移除桌面入口
+
+用户指出缺少适合桌面入口的退出机制，要求移除desktop。删除mctier.desktop及包内菜单/图标安装，移除desktop-file-utils构建依赖与相关检查；pkgrel提升为2，重新生成README校验与SRCINFO。保留终端命令mctier，中文说明和安装提示明确Ctrl+C退出、关网页不停止服务。前面的desktop验证结果只属于历史包。此次仅重新打包已有构建产物，不重编译业务代码、不安装或启动服务；升级时pacman会撤销旧包记录的desktop和图标。
+- 验证：Shell语法、SRCINFO一致性及pkgrel2重新打包通过；包体确认无desktop/菜单图标、保留/usr/bin/mctier并包含更新的终端退出说明。未安装到系统。

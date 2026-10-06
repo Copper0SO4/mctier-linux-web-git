@@ -1,13 +1,13 @@
 # Maintainer: Copper0SO4
 pkgname=mctier-linux-web-git
 pkgver=3.9.0.r379.g9f64665
-pkgrel=1
+pkgrel=2
 pkgdesc='MCTier Linux Web: virtual networking, chat and browser-based voice/screen sharing'
 arch=('x86_64')
 url='https://github.com/Copper0SO4/MCTier_Linux_Web'
 license=('custom:MCTier-NonCommercial' 'LGPL-3.0-only')
 depends=('bash' 'glibc' 'gcc-libs' 'openssl' 'dbus' 'libcap' 'polkit' 'curl' 'xdg-utils' 'coreutils' 'gawk')
-makedepends=('git' 'nodejs>=20' 'npm' 'rust>=1.90' 'desktop-file-utils')
+makedepends=('git' 'nodejs>=20' 'npm' 'rust>=1.90')
 optdepends=(
   'chromium: recommended browser for voice and screen sharing'
   'gnome-keyring: Secret Service provider for encrypted passwords'
@@ -24,7 +24,6 @@ source=(
   'https://github.com/EasyTier/EasyTier/releases/download/v2.5.0/easytier-linux-x86_64-v2.5.0.zip'
   'easytier-LICENSE::https://raw.githubusercontent.com/EasyTier/EasyTier/v2.5.0/LICENSE'
   'mctier.sh'
-  'mctier.desktop'
   'README.md'
 )
 noextract=('easytier-linux-x86_64-v2.5.0.zip')
@@ -33,8 +32,7 @@ sha256sums=(
   'c715d62ffcdad2578bc5d743bdfbcfe02cda9c12f80bd1bad3b36d4d7fc0eb8b'
   'e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118'
   'ba3b7137f5544d63e96c1e4458bb584c4605b29227969c1a54e30a75388b569e'
-  '38ff3bb75ee54dd69f052e079f82855a13c7ef80312692d521db87bafa5beb32'
-  '0a0a27f417adfb5d93b6ddbaea5e218be07b747bf293a75e6d678722cc1146f8'
+  '01a61c8e899f556475f691d47cb7daf364391e9a4419982e9085a45892d87fb1'
 )
 
 pkgver() {
@@ -74,13 +72,10 @@ package() {
   install -Dm755 MCTier-Linux-Web/resources/binaries/easytier-core "$app/bin/binaries/easytier-core"
   install -Dm755 MCTier-Linux-Web/resources/binaries/easytier-cli "$app/bin/binaries/easytier-cli"
   install -Dm755 "$srcdir/mctier.sh" "$pkgdir/usr/bin/mctier"
-  install -Dm644 "$srcdir/mctier.desktop" "$pkgdir/usr/share/applications/mctier.desktop"
-  install -Dm644 public/MCTierIcon.png "$pkgdir/usr/share/pixmaps/mctier.png"
   install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
   install -Dm644 "$srcdir/easytier-LICENSE" "$pkgdir/usr/share/licenses/$pkgname/EasyTier-LICENSE"
   for doc in README.md ADVANCED-NETWORK.md UFW-P2P-TROUBLESHOOTING.md; do
     install -Dm644 "MCTier-Linux-Web/$doc" "$pkgdir/usr/share/doc/$pkgname/$doc"
   done
   install -Dm644 "$srcdir/README.md" "$pkgdir/usr/share/doc/$pkgname/README-Arch.md"
-  desktop-file-validate "$pkgdir/usr/share/applications/mctier.desktop"
 }

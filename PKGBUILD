@@ -1,7 +1,7 @@
 # Maintainer: Copper0SO4
 pkgname=mctier-linux-web-git
-pkgver=3.9.0.r379.g9f64665
-pkgrel=2
+pkgver=3.9.0.r381.g8aefe58
+pkgrel=1
 pkgdesc='MCTier Linux Web: virtual networking, chat and browser-based voice/screen sharing'
 arch=('x86_64')
 url='https://github.com/Copper0SO4/MCTier_Linux_Web'
@@ -32,7 +32,7 @@ sha256sums=(
   'c715d62ffcdad2578bc5d743bdfbcfe02cda9c12f80bd1bad3b36d4d7fc0eb8b'
   'e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118'
   'ba3b7137f5544d63e96c1e4458bb584c4605b29227969c1a54e30a75388b569e'
-  '01a61c8e899f556475f691d47cb7daf364391e9a4419982e9085a45892d87fb1'
+  'd693230c6bf84b60c3ba5bb88b40210e3249d2c807c4dd1a5549d6bff255b252'
 )
 
 pkgver() {
@@ -45,7 +45,26 @@ pkgver() {
   printf '%s.r%s.g%s' "$release" "$revision" "$commit"
 }
 
+_check_rust_toolchain() {
+  local details
+  if ! details=$(rustc -vV 2>&1); then
+    printf '%s\n' \
+      '错误：Rust 编译器自身无法启动，还未开始编译 MCTier。' \
+      "当前 rustc：$(command -v rustc || true)" \
+      "$details" \
+      '请先修复系统 Rust/LLVM，或将经过验证的独立 Rust 工具链 bin 目录置于 PATH 最前面。' \
+      '排障说明见本仓库 README 的“Rust/LLVM 工具链错误”。' >&2
+    return 1
+  fi
+  if ! cargo --version; then
+    printf '%s\n' '错误：Cargo 无法启动，请检查 PATH 中的 Rust 工具链。' >&2
+    return 1
+  fi
+  printf '%s\n' "$details"
+}
+
 prepare() {
+  _check_rust_toolchain || return 1
   cd "$srcdir/MCTier"
   local target=MCTier-Linux-Web/resources/binaries
   mkdir -p "$target"

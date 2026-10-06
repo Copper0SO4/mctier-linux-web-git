@@ -25,6 +25,22 @@ makepkg -si
 
 即使打包文件没有变化，再次运行 makepkg 也会更新 Git 源码。构建只使用随源码保存的 npm/Cargo 锁文件；EasyTier core/CLI 固定2.5.0，压缩包与两个二进制均核对SHA-256。若Linux适配的来源检查或补丁失败，构建停止，需维护者对照上游修正，不自动忽略检查。
 
+## Rust/LLVM 工具链错误
+
+构建前先检查 `rustc -vV` 和 `cargo --version`。如果前者直接报 `symbol lookup error`、`undefined symbol ... version LLVM_23.1`，说明编译器本身加载动态库失败，还没有编译应用。包依赖已安装不等于系统工具链可以运行；当前开发机上也能复现此问题。此前软件包构建使用的是官方独立Rust1.90.0，不能算作系统Rust验证通过。
+
+PKGBUILD现在会在解压核心/npm安装之前检查编译器并明确报错。可选处理：由用户正常完整升级系统并复核Rust、LLVM及gcc-libs的一致性；不要仅单独升级LLVM或手工替换系统动态库。另一条路径是使用经过来源/校验核实的独立Rust工具链（本项目已验证1.90.0），在当前命令中指定其bin目录：
+
+```bash
+PATH="/path/to/verified-rust/bin:$PATH" makepkg -si
+# 或在本打包仓库中：
+PATH="/path/to/verified-rust/bin:$PATH" yay -Bi .
+```
+
+将占位路径换成实际工具链路径，须包含cargo和rustc；不需要修改全局PATH或移除系统Rust。本包不会自动下载安装另一套工具链。系统升级也不会由PKGBUILD执行。
+
+npm的esbuild安装脚本被阻止提示不是上述Rust失败原因。当前验证过的锁文件包含平台esbuild包，默认npm设置下已成功构建；若之后出现真正的esbuild缺失错误，需单独检查，勿为了这条提示放开所有依赖脚本。
+
 ## 启动
 
 ```bash

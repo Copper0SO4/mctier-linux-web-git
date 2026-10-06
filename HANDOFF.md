@@ -31,3 +31,12 @@ EasyTier包固定2.5.0，压缩包SHA-256沿用源项目fetch-binaries.sh；解�
 
 用户指出缺少适合桌面入口的退出机制，要求移除desktop。删除mctier.desktop及包内菜单/图标安装，移除desktop-file-utils构建依赖与相关检查；pkgrel提升为2，重新生成README校验与SRCINFO。保留终端命令mctier，中文说明和安装提示明确Ctrl+C退出、关网页不停止服务。前面的desktop验证结果只属于历史包。此次仅重新打包已有构建产物，不重编译业务代码、不安装或启动服务；升级时pacman会撤销旧包记录的desktop和图标。
 - 验证：Shell语法、SRCINFO一致性及pkgrel2重新打包通过；包体确认无desktop/菜单图标、保留/usr/bin/mctier并包含更新的终端退出说明。未安装到系统。
+
+## 2026-10-06：系统Rust不能启动的构建故障
+
+用户yay -Bi日志在prepare的cargo fetch处失败，rustc -vV本身退出127，要求basic_string::_M_mutate@LLVM_23.1。现场系统Rust1.99/LLVM23.1.1/gcc-libs16.2可复现，无LD_LIBRARY_PATH/LD_PRELOAD覆盖；objdump确认Rust driver要求LLVM_23.1版本符号而LLVM无对应导出，libstdc++只导出GLIBCXX_3.4.21版本。证据指向当前系统工具链二进制不匹配，尚不确定是发行打包还是本机更新状态；不能归因MCTier源码，也不自动替换系统库。独立官方Rust1.90.0（LLVM20.1.8）正常启动，之前构建实际使用该工具链。
+
+PKGBUILD增加prepare首项Rust/Cargo启动预检，README说明实际工具链与临时PATH办法；重新计算README SHA及SRCINFO。不自动下载编译器、不全局改PATH、不升级系统或安装软件。npm esbuild脚本提示不作为此Rust故障根因，保持原npm安全设置。
+
+- 恢复验证：仅给构建进程PATH指定/tmp/mctier-rust-toolchain/installed/bin，完整makepkg（来源校验、prepare、TypeScript/Vite、Rust release、打包）通过，产物3.9.0.r381.g8aefe58-1；makepkg更新pkgver后按惯例把pkgrel重置1。包体验证新README、mctier入口及无desktop通过。系统Rust失败预检亦现场复现，原始错误清楚显示。未执行pacman安装、pkexec或真实联机；用户可在其打包仓库用同一临时PATH搭配yay -Bi .完成安装。
+- makepkg的srcdir引用警告来自Rust编译时源路径（含开发态核心fallback），不是本次失败；已安装布局优先选择服务旁随包核心，包不依赖构建目录保留。若后续消除路径警告，需在主项目独立审查，不能直接删运行检查。

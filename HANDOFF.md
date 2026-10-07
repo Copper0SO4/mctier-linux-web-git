@@ -49,3 +49,12 @@ PKGBUILD增加prepare首项Rust/Cargo启动预检，README说明实际工具链�
 - 验证完成：主项目 TypeScript/Vite 与 Rust release 构建通过；新停止入口用临时 `sleep` 可执行文件模拟，TERM 与 PID 路径校验通过。Arch 包使用系统 Rust 1.99.0/LLVM 23.1.1 完整 `makepkg` 成功，版本 `3.9.0.r382.gc362bd7-1`；`pacman -Qip`、包内启动脚本语法、README校验和、`.SRCINFO`一致性通过。包 SHA-256：`de6e68cc7c33f5d7a54644aae43f6ec880d84d60fe0a395ec97e081024ba3e40`。
 - 产物位于临时隔离目录 `/tmp/mctier-pacman-build.V4R1TQ/mctier-linux-web-git-3.9.0.r382.gc362bd7-1-x86_64.pkg.tar.zst`，未安装到系统、未启动服务、未触发 CAP 授权或真实联机。旧版或其他路径启动的遗留实例可能无法由路径匹配的 `mctier --stop` 识别，需用 `ss -lptn 'sport = :14700'` 查明PID后单独停止。
 - 已上传到现有 GitHub `3.9.0` Release（未新建版本）。资产链接：`https://github.com/Copper0SO4/MCTier_Linux_Web/releases/download/3.9.0/mctier-linux-web-git-3.9.0.r382.gc362bd7-1-x86_64.pkg.tar.zst`；网页资产列表核对 SHA-256：`de6e68cc7c33f5d7a54644aae43f6ec880d84d60fe0a395ec97e081024ba3e40`。未安装或真实环境验收。
+
+## 2026-10-07：重建通用 x86_64 包
+
+- 用户报告已安装的服务启动时报 `Illegal instruction`。旧包的构建主机 `/etc/makepkg.conf.d/rust.conf` 设置了 `RUSTFLAGS="-C opt-level=3 -C target-cpu=native"`，`/etc/makepkg.conf` 还设置了 `-march=native`，而原PKGBUILD未覆盖这些参数。它们会令Rust或C/C++目标依赖构建机CPU特性，属于发行包可移植性风险；目前没有崩溃转储或目标设备CPU指令信息，故不能断言这就是该次非法指令的唯一根因。
+- PKGBUILD现把Rust目标与C/C++ `-march`/`-mtune` 显式设为通用 `x86-64` 基线，并把pkgver/.SRCINFO更新到当前上游提交 `fe617bc`。README说明修正及其尚待目标设备实测的限制。随包EasyTier核心与CLI不变，两个既有SHA-256校验通过。
+- 用户要求使用的独立Rust 1.90工具链已不在磁盘上；当前系统Rust/Cargo 1.99.0通过启动预检并完成此构建。因此本次产物使用系统Rust编译器，Rust目标明确为通用x86_64；不得描述成使用了独立工具链。以后若必须使用独立编译器，需重新获取并核验其官方来源。
+- 构建通过：npm准备、TypeScript/Vite前端构建、Rust release构建及makepkg封包均成功。最终日志显示C/C++ `-march=x86-64 -mtune=generic`、Rust `target-cpu=x86-64`。npm提示esbuild安装脚本受策略阻止，但前端构建已成功；Vite保留原有动态/静态导入提示。产物：`mctier-linux-web-git-3.9.0.r383.gfe617bc-1-x86_64.pkg.tar.zst`，SHA-256：`50eb54a451d702d05918d3169e3ffebc3aa1ca5df9cca2f650d0bcad2fef3753`。`pacman -Qip`确认包名、版本、依赖和架构；服务二进制与本次release构建输出SHA一致。
+- 本次只完成构建和静态包体检查，未安装新包、未替换当前系统文件，也未启动新服务。14700端口原有服务不受影响。未运行自动化测试，也未在报错设备上验证SIGILL是否消失；需用户安装新包并实际启动后才能确认运行修复。
+- 推送与GitHub Release替换尚未完成：当前执行环境解析不了 `github.com`，`git push` 因DNS失败退出；Release编辑页未提交，原 `r382` 资产保持不变。新包文件留在打包仓库目录，待网络恢复后上传并更新Release说明。

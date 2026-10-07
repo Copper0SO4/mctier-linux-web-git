@@ -57,4 +57,4 @@ PKGBUILD增加prepare首项Rust/Cargo启动预检，README说明实际工具链�
 - 用户要求使用的独立Rust 1.90工具链已不在磁盘上；当前系统Rust/Cargo 1.99.0通过启动预检并完成此构建。因此本次产物使用系统Rust编译器，Rust目标明确为通用x86_64；不得描述成使用了独立工具链。以后若必须使用独立编译器，需重新获取并核验其官方来源。
 - 构建通过：npm准备、TypeScript/Vite前端构建、Rust release构建及makepkg封包均成功。最终日志显示C/C++ `-march=x86-64 -mtune=generic`、Rust `target-cpu=x86-64`。npm提示esbuild安装脚本受策略阻止，但前端构建已成功；Vite保留原有动态/静态导入提示。产物：`mctier-linux-web-git-3.9.0.r383.gfe617bc-1-x86_64.pkg.tar.zst`，SHA-256：`50eb54a451d702d05918d3169e3ffebc3aa1ca5df9cca2f650d0bcad2fef3753`。`pacman -Qip`确认包名、版本、依赖和架构；服务二进制与本次release构建输出SHA一致。
 - 本次只完成构建和静态包体检查，未安装新包、未替换当前系统文件，也未启动新服务。14700端口原有服务不受影响。未运行自动化测试，也未在报错设备上验证SIGILL是否消失；需用户安装新包并实际启动后才能确认运行修复。
-- 推送与GitHub Release替换尚未完成：当前执行环境解析不了 `github.com`，`git push` 因DNS失败退出；Release编辑页未提交，原 `r382` 资产保持不变。新包文件留在打包仓库目录，待网络恢复后上传并更新Release说明。
+- PKGBUILD与文档已提交并推送至用户仓库 `main`，提交 `4da9186`。HTTPS推送受执行环境DNS/凭据限制，改用已配置的GitHub SSH认证完成推送。GitHub `3.9.0` Release 尚未更新；原 `r382` pacman资产仍在，新 `r383` 包文件保存在本地打包仓库目录，待上传后更新Release说明。

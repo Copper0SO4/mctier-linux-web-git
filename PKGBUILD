@@ -1,6 +1,6 @@
 # Maintainer: Copper0SO4
 pkgname=mctier-linux-web-git
-pkgver=3.9.0.r383.gfe617bc
+pkgver=3.10.0.r384.gc3f6a14
 pkgrel=1
 pkgdesc='MCTier Linux Web: virtual networking, chat and browser-based voice/screen sharing'
 arch=('x86_64')
@@ -32,7 +32,7 @@ sha256sums=(
   'c715d62ffcdad2578bc5d743bdfbcfe02cda9c12f80bd1bad3b36d4d7fc0eb8b'
   'e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118'
   'ba3b7137f5544d63e96c1e4458bb584c4605b29227969c1a54e30a75388b569e'
-  '7b175429d1d1c0baecff7903ae88d2b9e54b5f58069d967c8812193733e16bdb'
+  '70589dc7903d9f563b5188d390939c8aaab100cfdc31ab0dec74f24faccd2b04'
 )
 
 pkgver() {
@@ -78,23 +78,15 @@ prepare() {
   cargo fetch --locked --manifest-path MCTier-Linux-Web/server/Cargo.toml
 }
 
-_portable_arch_flags() {
-  sed -E \
-    -e 's/(^|[[:space:]])-march=[^[:space:]]+/\1-march=x86-64/g' \
-    -e 's/(^|[[:space:]])-mtune=[^[:space:]]+/\1-mtune=generic/g'
-}
-
 build() {
   cd "$srcdir/MCTier"
-  # Arch hosts may configure native CPU flags globally. Keep every compiled
-  # component on the x86-64 baseline for older CPUs and virtual machines.
-  local portable_cflags portable_cxxflags
-  portable_cflags=$(printf '%s\n' "${CFLAGS:-}" | _portable_arch_flags)
-  portable_cxxflags=$(printf '%s\n' "${CXXFLAGS:-}" | _portable_arch_flags)
-  printf 'CFLAGS: %s\nCXXFLAGS: %s\n' "$portable_cflags" "$portable_cxxflags"
-  printf 'Rust build flags: %s\n' '-C opt-level=3 -C target-cpu=x86-64'
-  CFLAGS="$portable_cflags" CXXFLAGS="$portable_cxxflags" \
-    RUSTFLAGS="-C opt-level=3 -C target-cpu=x86-64" \
+  # Do not inherit native target features from environment or makepkg config.
+  # Cargo's encoded flags override RUSTFLAGS, so clear them explicitly.
+  unset CARGO_ENCODED_RUSTFLAGS
+  printf 'Portable release target: Rust x86-64; C/C++ x86-64, generic tuning\n'
+  CFLAGS="-O2 -march=x86-64 -mtune=generic" \
+    CXXFLAGS="-O2 -march=x86-64 -mtune=generic" \
+    RUSTFLAGS="-C target-cpu=x86-64" \
     CARGO_NET_OFFLINE=true ./MCTier-Linux-Web/scripts/build-web-server.sh
 }
 

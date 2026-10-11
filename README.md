@@ -91,3 +91,7 @@ makepkg --verifysource
 本仓库只维护Arch打包；协议和功能在Linux Web主仓库维护。包体构建验证与安装、真实房间测试分开记录；本轮结果见 [HANDOFF.md](HANDOFF.md)。
 
 MCTier使用自定义源码可得、非商业许可；随包EasyTier使用LGPL-3.0，许可证安装到 `/usr/share/licenses/mctier-linux-web-git/`。此包不是完全开源许可的软件，请遵守主项目许可证。
+
+## 2026-10-11 / Linux Web 3.10.0
+
+源项目已核对官方最新稳定v3.10.0。当前PKGBUILD与ZIP发行流程统一固定Rust/C/C++通用x86_64编译目标，并清除优先级更高的CARGO_ENCODED_RUSTFLAGS；不继承环境中的native或其他CPU特定C/C++开关。软件仍使用系统Rust和系统运行库，不在构建时下载或替换工具链。实际发布包以GitHub3.10.0Release为准；保持mctier前台启动、Ctrl+C/--stop停止，不提供desktop文件。

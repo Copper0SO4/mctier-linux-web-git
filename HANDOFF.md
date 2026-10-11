@@ -59,3 +59,12 @@ PKGBUILD增加prepare首项Rust/Cargo启动预检，README说明实际工具链�
 - 本次只完成构建和静态包体检查，未安装新包、未替换当前系统文件，也未启动新服务。14700端口原有服务不受影响。未运行自动化测试，也未在报错设备上验证SIGILL是否消失；需用户安装新包并实际启动后才能确认运行修复。
 - PKGBUILD与文档已提交并推送至用户仓库 `main`，提交 `4da9186`。HTTPS推送受执行环境DNS/凭据限制，改用已配置的GitHub SSH认证完成推送。
 - GitHub `3.9.0` Release 已更新：通用 x86_64 包 `mctier-linux-web-git-3.9.0.r383.gfe617bc-1-x86_64.pkg.tar.zst` 已发布，旧 `r382` 构建包已从资产列表移除，ZIP 与 `.sha256` 资产保留。包 SHA-256：`50eb54a451d702d05918d3169e3ffebc3aa1ca5df9cca2f650d0bcad2fef3753`。Release 说明包含安装命令、通用 CPU 目标和校验值。
+
+## 2026-10-11：3.10.0 维护发行
+
+- 主项目已核对官方最新非预发行仍为v3.10.0，Linux Web准备发行3.10.0。本仓库原401a3c4发布记录提交仍保留，fetch后本地仅领先该提交，未覆盖远端修改。
+- PKGBUILD统一固定通用Rust/C/C++ CPU参数，清除CARGO_ENCODED_RUSTFLAGS；此前只替换-march/-mtune可能遗留单独-mavx类参数，本轮采用完整固定C/C++参数，其他打包/运行权限逻辑不变。README校验与SRCINFO同步。
+- 计划使用主项目已验证的通用release产物进行Arch封包，构建验证与软件安装分开报告。未安装软件包、调用pkexec或加入房间。结果随后追加。
+- 构建/封包完成：采用主项目c3f6a14已准备的工作树，makepkg --noextract --holdver --nodeps --nocheck重新运行完整Linux构建和package；不重新克隆/prepare或安装依赖。TypeScript/Vite/Rust release通过，566表情嵌入。版本3.10.0.r384.gc3f6a14-1，SHA-256：`f3625a5ec8b830565b43ff3c3be736509fb9940e0dafab11204493086697ce8b`。固定参数与ZIP发布脚本一致。
+- pacman -Qip、入口/核心/服务字节、无desktop、两份校验清单通过；SRCINFO和README校验更新。Arch服务与本次构建输出相同；ZIP与Arch独立链接，构建路径不同所以二进制SHA不同，不能混淆。临时构建目录/tmp/mctier-arch-3.10.0-50dbxq9b为此次新建，源码链接到已验证主项目。
+- makepkg继续显示源码路径引用警告（编译时开发资源fallback）；正常安装优先使用服务旁边随包核心。没有实际安装、触发授权、真实入房或旧CPU测试。本项目未发布到AUR。

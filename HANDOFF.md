@@ -68,3 +68,4 @@ PKGBUILD增加prepare首项Rust/Cargo启动预检，README说明实际工具链�
 - 构建/封包完成：采用主项目c3f6a14已准备的工作树，makepkg --noextract --holdver --nodeps --nocheck重新运行完整Linux构建和package；不重新克隆/prepare或安装依赖。TypeScript/Vite/Rust release通过，566表情嵌入。版本3.10.0.r384.gc3f6a14-1，SHA-256：`f3625a5ec8b830565b43ff3c3be736509fb9940e0dafab11204493086697ce8b`。固定参数与ZIP发布脚本一致。
 - pacman -Qip、入口/核心/服务字节、无desktop、两份校验清单通过；SRCINFO和README校验更新。Arch服务与本次构建输出相同；ZIP与Arch独立链接，构建路径不同所以二进制SHA不同，不能混淆。临时构建目录/tmp/mctier-arch-3.10.0-50dbxq9b为此次新建，源码链接到已验证主项目。
 - makepkg继续显示源码路径引用警告（编译时开发资源fallback）；正常安装优先使用服务旁边随包核心。没有实际安装、触发授权、真实入房或旧CPU测试。本项目未发布到AUR。
+- 2026-10-11 17:27（Asia/Shanghai）GitHub3.10.0正式Release发布：软件包和对应.sha256已上传，服务端digest与本地一致。页面：https://github.com/Copper0SO4/MCTier_Linux_Web/releases/tag/3.10.0 。本仓库源码提交d3ac949与之前401a3c4均已推送用户main。软件包实际安装/旧CPU/真实联机验收仍未执行。

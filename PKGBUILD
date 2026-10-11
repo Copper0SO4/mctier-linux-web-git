@@ -7,7 +7,7 @@ arch=('x86_64')
 url='https://github.com/Copper0SO4/MCTier_Linux_Web'
 license=('custom:MCTier-NonCommercial' 'LGPL-3.0-only')
 depends=('bash' 'glibc' 'gcc-libs' 'openssl' 'dbus' 'libcap' 'polkit' 'curl' 'xdg-utils' 'coreutils' 'gawk')
-makedepends=('git' 'nodejs>=20' 'npm' 'rust>=1.90')
+makedepends=('git' 'nodejs>=22.12' 'npm' 'rust>=1.90')
 optdepends=(
   'chromium: recommended browser for voice and screen sharing'
   'gnome-keyring: Secret Service provider for encrypted passwords'
